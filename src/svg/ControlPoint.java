@@ -1,5 +1,7 @@
 package svg;
 
+import java.util.Arrays;
+
 import statistics.*;
 
 public class ControlPoint {
@@ -20,6 +22,8 @@ public class ControlPoint {
 	public int end;
 	public int[]  coordinatesX;
 	public int[]  coordinatesY;
+	public int[] curveX;//Coordinates of the curve Not the oribinal shape, for error estimation 
+	public int[] curveY;//Coordinates of the curve Not the oribinal shape, for error estimation 
 	
 	
 	public ControlPoint(int x, int y) {
@@ -32,10 +36,13 @@ public class ControlPoint {
 		this.coordinatesY =  coordinatesY;
 		this.start = start;
 		this.end = end;
+		this.curveX = new int[end - start];
+		this.curveY = new int[end - start];
 		this.v0 = new Vector(coordinatesX[start], coordinatesY[start]);
 		this.v3 = new Vector(coordinatesX[end], coordinatesY[end]);
 		this.getAlpha1();
 		this.getAlpha2();
+		this.setValuesOfCurve();
 	}
 
 	
@@ -92,4 +99,25 @@ public class ControlPoint {
 	}
 	
 	
+	public void setValuesOfCurve() {
+		Vector outPutOfBernstein = new Vector();
+		double n = ((double) end - start);
+		double incr = 1/n;
+		double t = 0;
+		for(int i = 0; i < n; i++ ) {
+			double coeff0 = Math.pow((1-t), 3);
+			double coeff1 = Math.pow((1-t), 2) * t * 3;
+			double coeff2 = Math.pow(t, 2) * (1-t) * 3;
+			double coeff3 = Math.pow(t, 3);
+			Vector v0New = Vector.multiplyByScaler(v0, coeff0);
+			Vector v1New = Vector.multiplyByScaler(v1, coeff1);
+			Vector v2New = Vector.multiplyByScaler(v2, coeff2);
+			Vector v3New = Vector.multiplyByScaler(v3, coeff3);
+			Vector lerpVec = Vector.add4Vectors(v0New, v1New, v2New, v3New);
+			curveX[i] =(int) lerpVec.xD;
+			curveY[i] =(int) lerpVec.yD;
+			t += incr;
+		}
+		System.out.println("cureveX valus = " + Arrays.toString(curveX) + "\n" + "curveY values =  " + Arrays.toString(curveY));
+	}	
 }

@@ -1,6 +1,8 @@
 package svg;
 
 import java.io.*;
+import java.util.Arrays;
+
 import statistics.*;
 
 
@@ -9,7 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		String sep = File.separator;
-		String folder = "C:" + sep + "Users" + sep + "Toms" + sep + "Desktop" + sep + "ImageEXPERIMENTS";
+		String folder = "/Users/maksla/Desktop";
 		
 		String svg = """
 	            <?xml version="1.0" encoding="UTF-8"?>
@@ -47,9 +49,11 @@ public class Main {
 		Vector.getTangent1(x, y, 0);
 		System.out.println("above");
 		Vector.multiplyByScaler(t1, 2);
-		ControlPoint cp = new ControlPoint(s.halfCycleX, s.halfCycleY, 0, 314);
+		ControlPoint cp = new ControlPoint(s.xC, s.yC, 0, 314);
+//		ControlPoint cp1 = new ControlPoint(s.xC, s.yC, 314, 628);
 		System.out.println("control V1 point x = " + cp.v1.xD + " y = " + cp.v1.yD);
-		System.out.println("control V2 point x = " + cp.v2.xD + " y = " + cp.v2.yD);
+//		System.out.println("control V2 point x = " + cp.v2.xD + " y = " + cp.v2.yD);
+		System.out.println("sine x = " + Arrays.toString(s.xC) + "\n sine y = " + Arrays.toString(s.yC));
 		
 
 	}
