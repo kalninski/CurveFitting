@@ -40,7 +40,7 @@ public class Vector {
 		normalized.yD = this.yD / len;
 		normalized.x =(int) normalized.xD;
 		normalized.y = (int) normalized.yD;
-		System.out.println(String.format("vector (%d, %d) normalized = ("+  this.normalized.xD  + ", " +  this.normalized.yD +")", this.x, this.y));
+//		System.out.println(String.format("vector (%d, %d) normalized = ("+  this.normalized.xD  + ", " +  this.normalized.yD +")", this.x, this.y));
 		return normalized;
 	}
 	

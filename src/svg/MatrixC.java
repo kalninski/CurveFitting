@@ -95,44 +95,10 @@ public class MatrixC {
 		return det;
 	}
 	
-	public double calculateX1() {
-		int start1 = (int) start;
-		int end1 = (int) end;
+	public double calculateX1X2() {
+
 		Vector tan1 = Vector.getTangent1(coordinatesX, coordinatesY, start);
 		tangent1 = tan1;
-		Vector v0 = new Vector(coordinatesX[start], coordinatesY[start]);
-		Vector v3 = new Vector(coordinatesX[end], coordinatesY[end]);
-		
-		double n = end - start;
-		double incr = 1/((double) n);
-		double t = 0;
-		double sum = 0;
-		for(int i = 0; i < n; i++) {
-			double coeff1 = Math.pow((1-t), 3);// Bernstein polynomial term
-			double coeff2 = Math.pow((1-t), 2) * t * 3;// Bernstein polynomial term
-			double coeff3 = Math.pow(t, 2) * (1 - t) * 3;// Bernstein polynomial term
-			double coeff4 = Math.pow(t, 3);// Bernstein polynomial term
-			double coeff5 = Math.pow((1-t), 2) * t * 3;//outer multiplier tan1 * coeff2
-			Vector v01 = Vector.multiplyByScaler(v0, coeff1);
-			Vector v02 = Vector.multiplyByScaler(v0, coeff2);
-			Vector v33 = Vector.multiplyByScaler(v3, coeff3);
-			Vector v34 = Vector.multiplyByScaler(v3, coeff4);
-			Vector outerTan = Vector.multiplyByScaler(tan1, coeff5);
-			Vector sumBernstein = Vector.add4Vectors(v01, v02, v33, v34);
-			Vector dI = new Vector(coordinatesX[start + i], coordinatesY[start + i]);
-			Vector dIminusBernstein = Vector.subtract(dI, sumBernstein);
-			double oneTerm = dIminusBernstein.dot(outerTan);
-			t += incr;
-			sum += oneTerm;
-		}
-		
-		x1 = sum;
-		return sum;
-	}
-	
-	public double calculateX2() {
-		int start1 = (int) start;
-		int end1 = (int) end;
 		Vector tan2 = Vector.getTangent2(coordinatesX, coordinatesY, end);
 		tangent2 = tan2;
 		Vector v0 = new Vector(coordinatesX[start], coordinatesY[start]);
@@ -141,28 +107,68 @@ public class MatrixC {
 		double n = end - start;
 		double incr = 1/((double) n);
 		double t = 0;
-		double sum = 0;
+		double sum1 = 0;
+		double sum2 = 0;
 		for(int i = 0; i < n; i++) {
 			double coeff1 = Math.pow((1-t), 3);// Bernstein polynomial term
 			double coeff2 = Math.pow((1-t), 2) * t * 3;// Bernstein polynomial term
 			double coeff3 = Math.pow(t, 2) * (1 - t) * 3;// Bernstein polynomial term
 			double coeff4 = Math.pow(t, 3);// Bernstein polynomial term
-			double coeff5 = Math.pow(t, 2) * (1-t) * 3;//outer multiplier tan1 * coeff2
+			double coeff5_1 = Math.pow((1-t), 2) * t * 3;//outer multiplier tan1 * coeff2
+			double coeff5_2 = Math.pow(t, 2) * (1-t) * 3;//outer multiplier tan1 * coeff2
 			Vector v01 = Vector.multiplyByScaler(v0, coeff1);
 			Vector v02 = Vector.multiplyByScaler(v0, coeff2);
 			Vector v33 = Vector.multiplyByScaler(v3, coeff3);
 			Vector v34 = Vector.multiplyByScaler(v3, coeff4);
-			Vector outerTan = Vector.multiplyByScaler(tan2, coeff5);
+			Vector outerTan1 = Vector.multiplyByScaler(tan1, coeff5_1);
+			Vector outerTan2 = Vector.multiplyByScaler(tan2, coeff5_2);
 			Vector sumBernstein = Vector.add4Vectors(v01, v02, v33, v34);
 			Vector dI = new Vector(coordinatesX[start + i], coordinatesY[start + i]);
 			Vector dIminusBernstein = Vector.subtract(dI, sumBernstein);
-			double oneTerm = dIminusBernstein.dot(outerTan);
+			double oneTerm1 = dIminusBernstein.dot(outerTan1);
+			double oneTerm2 = dIminusBernstein.dot(outerTan2);
 			t += incr;
-			sum += oneTerm;
+			sum1 += oneTerm1;
+			sum2 += oneTerm2;
 		}
-		
-		x2 = sum;
-		return sum;
+		x1 = sum1;
+		x2 = sum2;
+		return sum1;
 	}
+	
+//	public double calculateX2() {
+//		int start1 = (int) start;
+//		int end1 = (int) end;
+//		Vector tan2 = Vector.getTangent2(coordinatesX, coordinatesY, end);
+//		tangent2 = tan2;
+//		Vector v0 = new Vector(coordinatesX[start], coordinatesY[start]);
+//		Vector v3 = new Vector(coordinatesX[end], coordinatesY[end]);
+//		
+//		double n = end - start;
+//		double incr = 1/((double) n);
+//		double t = 0;
+//		double sum = 0;
+//		for(int i = 0; i < n; i++) {
+//			double coeff1 = Math.pow((1-t), 3);// Bernstein polynomial term
+//			double coeff2 = Math.pow((1-t), 2) * t * 3;// Bernstein polynomial term
+//			double coeff3 = Math.pow(t, 2) * (1 - t) * 3;// Bernstein polynomial term
+//			double coeff4 = Math.pow(t, 3);// Bernstein polynomial term
+//			double coeff5 = Math.pow(t, 2) * (1-t) * 3;//outer multiplier tan1 * coeff2
+//			Vector v01 = Vector.multiplyByScaler(v0, coeff1);
+//			Vector v02 = Vector.multiplyByScaler(v0, coeff2);
+//			Vector v33 = Vector.multiplyByScaler(v3, coeff3);
+//			Vector v34 = Vector.multiplyByScaler(v3, coeff4);
+//			Vector outerTan = Vector.multiplyByScaler(tan2, coeff5);
+//			Vector sumBernstein = Vector.add4Vectors(v01, v02, v33, v34);
+//			Vector dI = new Vector(coordinatesX[start + i], coordinatesY[start + i]);
+//			Vector dIminusBernstein = Vector.subtract(dI, sumBernstein);
+//			double oneTerm = dIminusBernstein.dot(outerTan);
+//			t += incr;
+//			sum += oneTerm;
+//		}
+//		
+//		x2 = sum;
+//		return sum;
+//	}
 	
 }
