@@ -22,7 +22,7 @@ public class ControlPoint {
 	public int[]  coordinatesX;
 	public int[]  coordinatesY;
 	public int[] curveX;//Coordinates of the curve Not the original shape, for error estimation 
-	public int[] curveY;//Coordinates of the curve Not the original shape, for error estimation 
+	public int[] curveY;//the size is the size of the subarray, each subarray when ControlPoint is instantiated has the array of this size
 	public double[] error;
 	public double maxError;
 	
@@ -62,7 +62,7 @@ public class ControlPoint {
 			v0Tan1 = Vector.multiplyByScaler(v0Tan1, alpha1);
 		}
 		v1 = Vector.add(v0Tan1, v0);
-		System.out.println("determinant = " + denominator + " c11 = " + matrix.c11 + " c12 = " + matrix.c12 + " c21 = " + matrix.c21 + " c22 = " + matrix.c22);
+//		System.out.println("determinant = " + denominator + " c11 = " + matrix.c11 + " c12 = " + matrix.c12 + " c21 = " + matrix.c21 + " c22 = " + matrix.c22);
 		return alpha1;
 	}
 	
@@ -120,7 +120,7 @@ public class ControlPoint {
 		maxError = 0;
 		error = new double[end - start];
 		for(int i = 0; i < error.length; i++) {
-			error[i] = Math.abs(f.yC[i] - curveY[i]);
+			error[i] = Math.abs(f.yC[start + i] - curveY[i]);
 			if(error[i] > error[errorIndex]) {
 				maxError = error[i];
 				errorIndex = i;
