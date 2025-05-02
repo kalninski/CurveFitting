@@ -19,16 +19,16 @@ public class ControlPoint {
 	public Vector v3Tan2; //tangent of the second control point
 	public int start;
 	public int end;
-	public int[]  coordinatesX;
-	public int[]  coordinatesY;
-	public int[] curveX;//Coordinates of the curve Not the original shape, for error estimation 
-	public int[] curveY;//the size is the size of the subarray, each subarray when ControlPoint is instantiated has the array of this size
+	public double[]  coordinatesX;//double
+	public double[]  coordinatesY;//double
+	public double[] curveX;//Coordinates of the curve Not the original shape, for error estimation //double
+	public double[] curveY;//the size is the size of the subarray, each subarray when ControlPoint is instantiated has the array of this size//double
 	public double[] error;
 	public double maxError;
 	
 	
 	
-	public ControlPoint(int[] coordinatesX, int[]  coordinatesY, int start, int end) {
+	public ControlPoint(double[] coordinatesX, double[]  coordinatesY, int start, int end) {
 		this. coordinatesX =  coordinatesX;
 		this.coordinatesY =  coordinatesY;
 		this.start = start;
@@ -37,8 +37,8 @@ public class ControlPoint {
 		this.v3 = new Vector(coordinatesX[end], coordinatesY[end]);
 		this.getAlpha1();
 		this.getAlpha2();
-		this.curveX = new int[end - start];
-		this.curveY = new int[end - start];
+		this.curveX = new double[end - start];
+		this.curveY = new double[end - start];
 	}
 
 	
@@ -120,7 +120,7 @@ public class ControlPoint {
 		maxError = 0;
 		error = new double[end - start];
 		for(int i = 0; i < error.length; i++) {
-			error[i] = Math.abs(f.yC[start + i] - curveY[i]);
+			error[i] = Math.abs(f.yActualVal[start + i] - curveY[i]);
 			if(error[i] > error[errorIndex]) {
 				maxError = error[i];
 				errorIndex = i;

@@ -8,24 +8,25 @@ import statistics.*;
 public class GenerateXML {
 	
 	public Function f;
-	public int[] functionArrX;
-	public int[] functionArrY;
+	public double[] functionArrX;
+	public double[] functionArrY;
 	public double[] errorArr;
 	public int start;
 	public int end;
-	public StringBuilder svg = new StringBuilder("""
-												<?xml version="1.0" encoding="UTF-8"?>
-            									<svg width="1200" height="1000" xmlns="http://www.w3.org/2000/svg">
-              									<path d=\"""");
-	public String restXML =  "\" stroke=\"black\" fill=\"none\" stroke-width=\"2\"/>"
-							+ "</svg>";
+//	public StringBuilder svg = new StringBuilder("""
+//												<?xml version="1.0" encoding="UTF-8"?>
+//            									<svg width="1200" height="1000" xmlns="http://www.w3.org/2000/svg">
+//              									<path d=\"""");
+	StringBuilder svg = new StringBuilder();
+	public String restXML =  "\" stroke=\"black\" fill=\"none\" stroke-width=\"2\"/></svg>";
+							
 			        
 
 	
 	public GenerateXML(Function f) {
 		this.f = f;
-		this.functionArrY = f.yC;
-		this.functionArrX = f.xC;
+		this.functionArrY = f.yActualVal;
+		this.functionArrX = f.xActualVal;
 		
 	}
 	
@@ -53,18 +54,23 @@ public class GenerateXML {
 	}
 	
 	public void createXML1(Function f, int start, int end) {
-		ControlPoint cp = new ControlPoint(f.xC, f.yC, start, end);
+		ControlPoint cp = new ControlPoint(f.xActualVal, f.yActualVal, start, end);
 		cp.getValuesOfCurve();
 		String points;
 		int e = cp.getErrorIndex(f);
 
-			points = String.format(Locale.US,"M %d,%d C %.2f,%.2f %.2f,%.2f %d,%d",  functionArrX[start], functionArrY[start], cp.v1.xD, cp.v1.yD, cp.v2.xD, cp.v2.yD, functionArrX[end], functionArrY[end]);
+			points = String.format(Locale.US,"M %.2f,%.2f C %.2f,%.2f %.2f,%.2f %.2f,%.2f",  functionArrX[start], functionArrY[start], cp.v1.xD, cp.v1.yD, cp.v2.xD, cp.v2.yD, functionArrX[end], functionArrY[end]);
 
-		if(cp.maxError > 30 && (end - start) > 20 && e > 3) {
+		if(cp.maxError > 10 && (end - start - e) > 20 && e > 5) {
 			createXML1(f, start, start + e);
+			System.out.println("left size = " + e);
 			createXML1(f, start + e, end);
-		}
-		if(cp.maxError <= 30 || (end - start) <= 20 || (e <= 3 && e > 1)){
+			System.out.println("right size = " + (end - (start + e)));
+		}else {
+			if(cp.v1.xD == Double.NaN || cp.v1.yD == Double.NaN || cp.v2.xD == Double.NaN || cp.v2.yD == Double.NaN){
+				System.out.println("one or more of the points was NaN");
+				points = String.format(Locale.US,"M %.2f,%.2f L %.2f,%.2f",  functionArrX[start], functionArrY[start], functionArrX[end], functionArrY[end]);
+			}
 			svg.append(points);
 			System.out.println(points);
 		}

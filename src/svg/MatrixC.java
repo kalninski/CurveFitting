@@ -8,20 +8,20 @@ public class MatrixC {
 	public double c22;
 	public double x1;
 	public double x2;
-	public int[] coordinatesX;
-	public int[] coordinatesY;
+	public double[] coordinatesX;//double
+	public double[] coordinatesY;//double
 	public Vector tangent1;
 	public Vector tangent2;
 	public double dotTan1Tan2;
 	public int start;
 	public int end;
 	
-	public MatrixC(int[] coordinatesX, int[] coordinatesY, int start, int end) {
+	public MatrixC(double[] coordinatesX, double[] coordinatesY, int start, int end) {
 		this.tangent1 = Vector.getTangent1(coordinatesX, coordinatesY, start);
 		this.tangent2 = Vector.getTangent2(coordinatesX, coordinatesY, end);
 		this.dotTan1Tan2 = this.tangent1.dot(tangent2);
-		System.out.println("tangent1.normalize() = " + this.tangent1.xD + ", " + this.tangent1.yD);
-		System.out.println("tangent2.normalize() = " + this.tangent2.xD + ", " + this.tangent2.yD);
+//		System.out.println("tangent1.normalize() = " + this.tangent1.xD + ", " + this.tangent1.yD);
+//		System.out.println("tangent2.normalize() = " + this.tangent2.xD + ", " + this.tangent2.yD);
 		
 		this.coordinatesX = coordinatesX;
 		this.coordinatesY = coordinatesY;
@@ -36,7 +36,7 @@ public class MatrixC {
 		this.tangent2 = tangent2.normalize();
 
 		this.dotTan1Tan2 = this.tangent1.dot(tangent2);
-		System.out.println("tangent1 = "+ this.tangent1.xD + this.tangent1.yD + "tangent2 = "+ this.tangent2.xD + this.tangent2.yD);
+//		System.out.println("tangent1 = "+ this.tangent1.xD + this.tangent1.yD + "tangent2 = "+ this.tangent2.xD + this.tangent2.yD);
 	}
 	
 	public MatrixC(double c11, double c12, double c21, double c22) {
@@ -48,7 +48,7 @@ public class MatrixC {
 	
 	public void setC11() {
 		double n = end - start;
-		double incr = 1/((double) n);
+		double incr = 1/n;
 		double t = 0;
 		double sum = 0;
 		for(int i = 1; i < n; i++) {
@@ -61,10 +61,10 @@ public class MatrixC {
 	
 	public void setC12() {
 		double n = end - start;
-		double incr = 1/((double) n);
+		double incr = 1/n;
 		double t = 0;
 		double sum = 0;
-		System.out.println("dotTan1Tan2 = " + dotTan1Tan2);
+//		System.out.println("dotTan1Tan2 = " + dotTan1Tan2);
 		for(int i = 0; i < n; i++) {
 			
 			sum += Math.pow((1-t), 3) * t * t * t * 9 * dotTan1Tan2;
@@ -78,7 +78,7 @@ public class MatrixC {
 	
 	public void setC22() {
 		double n = end - start;
-		double incr = 1/((double) n);
+		double incr = 1/n;
 		double t = 0;
 		double sum = 0;
 		for(int i = 0; i < n; i++) {
@@ -91,7 +91,7 @@ public class MatrixC {
 	
 	public double calculateDeterminant() {
 		double det = (this.c11 * this.c22) - (this.c12 * this.c21);
-		System.out.println("det = " + det);
+//		System.out.println("det = " + det);
 		return det;
 	}
 	
@@ -105,7 +105,7 @@ public class MatrixC {
 		Vector v3 = new Vector(coordinatesX[end], coordinatesY[end]);
 		
 		double n = end - start;
-		double incr = 1/((double) n);
+		double incr = 1/n;
 		double t = 0;
 		double sum1 = 0;
 		double sum2 = 0;

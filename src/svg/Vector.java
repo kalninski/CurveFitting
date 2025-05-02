@@ -44,41 +44,37 @@ public class Vector {
 		return normalized;
 	}
 	
-	public static Vector getTangent1(int[] coordinatesX, int[] coordinatesY, int index) {
+	public static Vector getTangent1(double[] coordinatesX, double[] coordinatesY, int index) {//double //double
 		Vector tg = new Vector(coordinatesX[index], coordinatesY[index]);
-		double x1 = ((double) coordinatesX[index + 1])  - tg.xD;
-		double y1 = ((double) coordinatesY[index + 1])  - tg.yD;
-		double x2 = ((double) coordinatesX[index + 2])  - tg.xD;
-		double y2 = ((double) coordinatesY[index + 2])  - tg.yD;
-		double x3 = ((double) coordinatesX[index + 3])  - tg.xD;
-		double y3 = ((double) coordinatesY[index + 3])  - tg.yD;
-		tg.xD = (x1 + x2 + x3)/3;
-		tg.yD = (y1 + y2 + y3)/3;
-		tg.x =(int) (x1 + x2 + x3)/3;
-		tg.y =(int) (y1 + y2 + y3)/3;
+
+		double x = 0;
+		double y = 0;
+		for(int i = 0; i <= 5; i++) {
+			x += ( coordinatesX[index + i] - tg.xD);//double
+			y += (coordinatesY[index + i] - tg.yD);//double
+		}
+		tg.xD = x/5;
+		tg.yD = y/5;
+		tg.x =(int) (x)/5;
+		tg.y =(int) (y)/5;
 		tg = tg.normalize();
 		return tg;
 		
 	}
 	
-	public static Vector getTangent2(int[] coordinatesX, int[] coordinatesY, int index) {
+	public static Vector getTangent2(double[] coordinatesX, double[] coordinatesY, int index) {//double//double
 		Vector tg = new Vector(coordinatesX[index], coordinatesY[index]);
-		double x1 = ((double) coordinatesX[index - 1]) - tg.xD;
-		double y1 = ((double) coordinatesY[index - 1]) - tg.yD;
-		double x2 = ((double) coordinatesX[index - 2]) - tg.xD;
-		double y2 = ((double) coordinatesY[index - 2]) - tg.yD;
-		double x3 = ((double) coordinatesX[index - 3]) - tg.xD;
-		double y3 = ((double) coordinatesY[index - 3]) - tg.yD;
-//		double x4 = tg.xD - ((double) coordinatesY[index + 4]);
-//		double y4 = tg.yD - ((double) coordinatesY[index + 4]);
-//		double x5 = tg.xD - ((double) coordinatesY[index + 5]);
-//		double y5 = tg.yD - ((double) coordinatesY[index + 5]);
-//		double x6 = tg.xD - ((double) coordinatesX[index + 6]);
-//		double y6 = tg.yD - ((double) coordinatesY[index + 6]) ;
-		tg.xD = (x1 + x2 + x3)/3;
-		tg.yD = (y1 + y2 + y3)/3;
-		tg.x =(int) (x1 + x2 + x3)/3;
-		tg.y =(int) (y1 + y2 + y3)/3;
+
+		double x = 0;
+		double y = 0;
+		for(int i = 0; i <= 5; i++) {
+			x += (coordinatesX[index - i] - tg.xD);//double
+			y += (coordinatesY[index - i] - tg.yD);//double
+		}
+		tg.xD = x/5;
+		tg.yD = y/5;
+		tg.x =(int) (x)/5;
+		tg.y =(int) (y)/5;
 		tg = tg.normalize();
 		return tg;
 		
