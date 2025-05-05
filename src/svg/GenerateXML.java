@@ -59,9 +59,9 @@ public class GenerateXML {
 		String points;
 		int e = cp.getErrorIndex(f);
 
-			points = String.format(Locale.US,"M %.2f,%.2f C %.2f,%.2f %.2f,%.2f %.2f,%.2f",  functionArrX[start], functionArrY[start], cp.v1.xD, cp.v1.yD, cp.v2.xD, cp.v2.yD, functionArrX[end], functionArrY[end]);
+		points = String.format(Locale.US,"M %.2f,%.2f C %.2f,%.2f %.2f,%.2f %.2f,%.2f",  functionArrX[start], functionArrY[start], cp.v1.xD, cp.v1.yD, cp.v2.xD, cp.v2.yD, functionArrX[end], functionArrY[end]);
 
-		if(cp.maxError > 10 && (end - start - e) > 20 && e > 5) {
+		if(cp.maxError > 5 && (end - start - e) > 15 && e > 5) {
 			createXML1(f, start, start + e);
 			System.out.println("left size = " + e);
 			createXML1(f, start + e, end);

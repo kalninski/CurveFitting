@@ -104,6 +104,15 @@ public class Vector {
 		return vAdd;
 	}
 	
+	public static Vector add3Vectors(Vector v1, Vector v2, Vector v3) {
+		double addVX = v1.xD + v2.xD + v3.xD;
+		double addVY = v1.yD + v2.yD + v3.yD;
+		Vector vAdd = new Vector(addVX, addVY);
+		return vAdd;
+	}
+	
+
+	
 	public static Vector subtract(Vector v1, Vector v2) {
 		double subtractVX = v1.xD - v2.xD;
 		double subtractVY = v1.yD - v2.yD;

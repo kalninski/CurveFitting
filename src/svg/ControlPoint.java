@@ -9,12 +9,11 @@ public class ControlPoint {
 	public int y;
 //	public double xNormD;
 //	public double yNormD;
-	public int xNormInt;
-	public int yNormInt;
-	public Vector v0;
-	public Vector v1;
-	public Vector v2;
-	public Vector v3;
+
+	public static Vector v0;
+	public static Vector v1;
+	public static Vector v2;
+	public static Vector v3;
 	public Vector v0Tan1; //tangent of the first control point
 	public Vector v3Tan2; //tangent of the second control point
 	public int start;
@@ -25,6 +24,8 @@ public class ControlPoint {
 	public double[] curveY;//the size is the size of the subarray, each subarray when ControlPoint is instantiated has the array of this size//double
 	public double[] error;
 	public double maxError;
+	public double incr;
+
 	
 	
 	
@@ -35,6 +36,7 @@ public class ControlPoint {
 		this.end = end;
 		this.v0 = new Vector(coordinatesX[start], coordinatesY[start]);
 		this.v3 = new Vector(coordinatesX[end], coordinatesY[end]);
+		this.incr = 1/((double) (end - start));
 		this.getAlpha1();
 		this.getAlpha2();
 		this.curveX = new double[end - start];
@@ -108,8 +110,8 @@ public class ControlPoint {
 			Vector v2New = Vector.multiplyByScaler(v2, coeff2);
 			Vector v3New = Vector.multiplyByScaler(v3, coeff3);
 			Vector lerpVec = Vector.add4Vectors(v0New, v1New, v2New, v3New);
-			curveX[i] =(int) lerpVec.xD;
-			curveY[i] =(int) lerpVec.yD;
+			curveX[i] = lerpVec.xD;
+			curveY[i] = lerpVec.yD;
 			t += incr;
 		}
 //		System.out.println("curveX values = " + Arrays.toString(curveX) + "\n" + "curveY values =  " + Arrays.toString(curveY));
@@ -129,5 +131,51 @@ public class ControlPoint {
 		return errorIndex;
 	}
 	
+	public static Vector getOneValueOfCurve(double t) {
+		double coeff0 = Math.pow((1-t), 3);
+		double coeff1 = Math.pow((1-t), 2) * t * 3;
+		double coeff2 = Math.pow(t, 2) * (1-t) * 3;
+		double coeff3 = Math.pow(t, 3);
+		Vector v0New = Vector.multiplyByScaler(v0, coeff0);
+		Vector v1New = Vector.multiplyByScaler(v1, coeff1);
+		Vector v2New = Vector.multiplyByScaler(v2, coeff2);
+		Vector v3New = Vector.multiplyByScaler(v3, coeff3);
+		return Vector.add4Vectors(v0New, v1New, v2New, v3New);
+	}
+	
+	public static Vector getOneValueOfCurveFirstDerivative(double t) {
+		double coeff0 = Math.pow((1-t), 2);
+		double coeff1 = (1-t) * t * 2;
+		double coeff2 = Math.pow(t, 2);
+		Vector deltaV0 = Vector.subtract(v1, v0);
+		Vector deltaV1 = Vector.subtract(v2, v1);
+		Vector deltaV2 = Vector.subtract(v3, v2);
+		Vector v0New = Vector.multiplyByScaler(deltaV0, coeff0);
+		Vector v1New = Vector.multiplyByScaler(deltaV1, coeff1);
+		Vector v2New = Vector.multiplyByScaler(deltaV2, coeff2);
+		Vector sum = Vector.add3Vectors(v0New, v1New, v2New);
+		return Vector.multiplyByScaler(sum, 3);
+	}
+	
+	public static Vector getOneValueOfCurveSecondDerivative(double t) {
+		double coeff0 = 1-t;
+		double coeff1 = t;
+		Vector delta1V0 = Vector.subtract(v1, v0);
+		Vector delta1V1 = Vector.subtract(v2, v1);
+		Vector delta1V2 = Vector.subtract(v3, v2);
+		Vector delta2V0 = Vector.subtract(delta1V1, delta1V0);
+		Vector delta2V1 = Vector.subtract(delta1V2, delta1V1);
+		delta2V0 = Vector.multiplyByScaler(delta2V0, coeff0);
+		delta2V1 = Vector.multiplyByScaler(delta2V1, coeff1);
+		Vector sum = Vector.add(delta2V1, delta2V0);
+		return Vector.multiplyByScaler(sum, (6));
+	}
+	
+	public double updateTParameter(double t) {
+		
+		
+		
+		return t;
+	}
 
 }
