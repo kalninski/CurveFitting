@@ -18,8 +18,8 @@ public class ControlPoint {
 	public Vector v3Tan2; //tangent of the second control point
 	public int start;
 	public int end;
-	public double[]  coordinatesX;//double
-	public double[]  coordinatesY;//double
+	public static double[]  coordinatesX;//double
+	public static double[]  coordinatesY;//double
 	public double[] curveX;//Coordinates of the curve Not the original shape, for error estimation //double
 	public double[] curveY;//the size is the size of the subarray, each subarray when ControlPoint is instantiated has the array of this size//double
 	public double[] error;
@@ -41,11 +41,13 @@ public class ControlPoint {
 		this.getAlpha2();
 		this.curveX = new double[end - start];
 		this.curveY = new double[end - start];
+		this.getAlpha1();
+		this.getAlpha2();
 	}
 
 	
 	public double getAlpha1() {
-		MatrixC matrix = new MatrixC(coordinatesX, coordinatesY, start, end);
+		MatrixC matrix = new MatrixC(coordinatesX, coordinatesY, start, end, v1, v2);
 		matrix.calculateX1X2();
 		matrix.setC11();
 		matrix.setC12();
@@ -69,7 +71,7 @@ public class ControlPoint {
 	}
 	
 	public double getAlpha2() {
-		MatrixC matrix = new MatrixC(coordinatesX, coordinatesY, start, end);
+		MatrixC matrix = new MatrixC(coordinatesX, coordinatesY, start, end, v1, v2);
 		matrix.calculateX1X2();
 		matrix.setC11();
 		matrix.setC12();
@@ -101,6 +103,9 @@ public class ControlPoint {
 		double incr = 1/n;
 		double t = 0;
 		for(int i = 0; i < n; i++ ) {
+			if(v1 != null && v2 != null) {
+				t = ControlPoint.updateTParameter(t, i);
+			}
 			double coeff0 = Math.pow((1-t), 3);
 			double coeff1 = Math.pow((1-t), 2) * t * 3;
 			double coeff2 = Math.pow(t, 2) * (1-t) * 3;
@@ -112,7 +117,7 @@ public class ControlPoint {
 			Vector lerpVec = Vector.add4Vectors(v0New, v1New, v2New, v3New);
 			curveX[i] = lerpVec.xD;
 			curveY[i] = lerpVec.yD;
-			t += incr;
+			t = (i) * incr;
 		}
 //		System.out.println("curveX values = " + Arrays.toString(curveX) + "\n" + "curveY values =  " + Arrays.toString(curveY));
 	}
@@ -171,10 +176,20 @@ public class ControlPoint {
 		return Vector.multiplyByScaler(sum, (6));
 	}
 	
-	public double updateTParameter(double t) {
+	public static double updateTParameter(double t, int index) {
 		
-		
-		
+		Vector qT = getOneValueOfCurve(t);
+		Vector dI = new Vector(coordinatesX[index], coordinatesY[index]);
+		Vector subtraction = Vector.subtract(qT, dI);
+		Vector qPrimeT = getOneValueOfCurveFirstDerivative(t);
+		double numerator = subtraction.dot(qPrimeT);
+		double productRule1 = qPrimeT.dot(qPrimeT);
+		Vector qDoublePrimeT = getOneValueOfCurveSecondDerivative(t);
+		double productRule2 = subtraction.dot(qDoublePrimeT);
+		double denominator = productRule1 + productRule2;
+		double fraction = numerator/denominator;
+		t = t - fraction;
+//		System.out.println("the new t = " + t + " old t = "  + (t + fraction));
 		return t;
 	}
 

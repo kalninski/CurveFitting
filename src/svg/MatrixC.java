@@ -19,10 +19,12 @@ public class MatrixC {
 	public int end;
 	public static double t;
 	
-	public MatrixC(double[] coordinatesX, double[] coordinatesY, int start, int end) {
+	public MatrixC(double[] coordinatesX, double[] coordinatesY, int start, int end, Vector v1, Vector v2) {
 		this.tangent1 = Vector.getTangent1(coordinatesX, coordinatesY, start);
 		this.tangent2 = Vector.getTangent2(coordinatesX, coordinatesY, end);
 		this.dotTan1Tan2 = this.tangent1.dot(tangent2);
+		this.v1 = v1;
+		this.v2 = v2;
 //		System.out.println("tangent1.normalize() = " + this.tangent1.xD + ", " + this.tangent1.yD);
 //		System.out.println("tangent2.normalize() = " + this.tangent2.xD + ", " + this.tangent2.yD);
 		
@@ -53,11 +55,18 @@ public class MatrixC {
 		double n = end - start;
 		double incr = 1/n;
 		double t = 0;
+		double newT = 0;
 		double sum = 0;
 		for(int i = 1; i < n; i++) {
+			
+			if(v1 != null && v2 != null) {
+				t = ControlPoint.updateTParameter(t, i);
+			}
 
 			sum += Math.pow((1-t), 4) * t * t * 9;
-			t += incr;
+			t = (i) * incr;
+
+
 		}
 		c11 = sum;
 	}
@@ -66,13 +75,18 @@ public class MatrixC {
 		double n = end - start;
 		double incr = 1/n;
 		double t = 0;
+		double newT = 0;
 		double sum = 0;
 //		System.out.println("dotTan1Tan2 = " + dotTan1Tan2);
 		for(int i = 0; i < n; i++) {
 			
+			if(v1 != null && v2 != null) {
+				t = ControlPoint.updateTParameter(t, i);
+			}
+			
 			sum += Math.pow((1-t), 3) * t * t * t * 9 * dotTan1Tan2;
 			
-			t += incr;
+			t = (i) * incr;
 		}
 		c12 = sum;
 		c21 = sum;
@@ -83,11 +97,16 @@ public class MatrixC {
 		double n = end - start;
 		double incr = 1/n;
 		double t = 0;
+		double newT = 0;
 		double sum = 0;
 		for(int i = 0; i < n; i++) {
+			
+			if(v1 != null && v2 != null) {
+				t = ControlPoint.updateTParameter(t, i);
+			}
 
 			sum += Math.pow((1-t), 2) * t * t * t * t * 9;
-			t += incr;
+			t = (i) * incr;
 		}
 		c22 = sum;
 	}
@@ -110,9 +129,14 @@ public class MatrixC {
 		double n = end - start;
 		double incr = 1/n;
 		double t = 0;
+		double newT = 0;
 		double sum1 = 0;
 		double sum2 = 0;
 		for(int i = 0; i < n; i++) {
+			if(v1 != null && v2 != null) {
+				t = ControlPoint.updateTParameter(t, i);
+			}
+			
 			double coeff1 = Math.pow((1-t), 3);// Bernstein polynomial term
 			double coeff2 = Math.pow((1-t), 2) * t * 3;// Bernstein polynomial term
 			double coeff3 = Math.pow(t, 2) * (1 - t) * 3;// Bernstein polynomial term
@@ -130,7 +154,7 @@ public class MatrixC {
 			Vector dIminusBernstein = Vector.subtract(dI, sumBernstein);
 			double oneTerm1 = dIminusBernstein.dot(outerTan1);
 			double oneTerm2 = dIminusBernstein.dot(outerTan2);
-			t += incr;
+			t = (i) * incr;
 			sum1 += oneTerm1;
 			sum2 += oneTerm2;
 		}

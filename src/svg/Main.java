@@ -22,9 +22,9 @@ public class Main {
 //		System.out.println(Arrays.toString(gd.xC) + "\n" + Arrays.toString(gd.yC));
 		System.out.println(Arrays.toString(s.xActualVal) + "\n" + Arrays.toString(s.yActualVal));
 //		s.createValues();
-		GenerateXML xml = new GenerateXML(s);
+		GenerateXML xml = new GenerateXML(gd);
 //		xml.createXML();
-		xml.createXML1(s, 0, s.yActualVal.length - 1);
+		xml.createXML1(gd, 0, gd.yActualVal.length - 1);
 		System.out.println(xml.svg);
 
 
@@ -44,7 +44,7 @@ public class Main {
 		String svg = String.format(svg1, xml.svg);
 		
 		try {
-			FileWriter w = new FileWriter(folder + sep + "line54.svg");
+			FileWriter w = new FileWriter(folder + sep + "line58.svg");
 			w.write(svg);
 			w.close();
 			System.out.println(w.getEncoding());
