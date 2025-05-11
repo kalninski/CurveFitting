@@ -55,7 +55,7 @@ public class Main {
 		String svg = String.format(svg1, xml.svg);
 		
 		try {
-			FileWriter w = new FileWriter(folder + sep + "line74.svg");
+			FileWriter w = new FileWriter(folder + sep + "line75.svg");
 			w.write(svg);
 			w.close();
 //			System.out.println(w.getEncoding());

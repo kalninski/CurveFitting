@@ -33,6 +33,7 @@ public class ControlPoint {
 		this.v0 = new Vector(functionX[start], functionY[start]);
 		this.v3 = new Vector(functionX[end], functionY[end]);
 		initialParameterT();
+		System.out.println("T parameter array = " + Arrays.toString(parameterT));
 		setV1();
 		setV2();
 		getValuesOfCurve();
@@ -56,12 +57,33 @@ public class ControlPoint {
 	
 	public void initialParameterT1() {
 		double n = end - start;
-		parameterT = new double[end - start];
-		double increment = 1/n;
-		double t = 0;
-		for(int i = 0; i < n; i++) {
-			parameterT[i] = t;
-			t += increment;
+		double totalDist = 0;
+		parameterT = new double[(int) (n)];
+		double[] distances = new double[(int) (n-1)];
+		double cumulativeDist = 0;
+		if(n <= 1) {
+			parameterT[0] = 0;
+			return;
+		}
+		for(int i = 0; i < n-1; i++) {
+			double dy = functionY[start + i + 1] - functionY[start + i];
+			double dx = functionX[start + i + 1] - functionX[start + i];
+			double dyPow2 = Math.pow(dy, 2);
+			double dxPow2 = Math.pow(dx, 2);
+			totalDist += Math.sqrt(dyPow2 + dxPow2);
+			distances[i] = Math.sqrt(dyPow2 + dxPow2);
+			
+		}
+		if(totalDist <= 1E-10) {
+			for(int k = 0; k < n; k++) {
+				parameterT[k] = ((double) k) / n;
+			}
+		}else {
+		parameterT[0] = 0;
+		for(int j = 0; j < n - 1; j++) {
+			cumulativeDist += distances[j];
+			parameterT[j + 1] = cumulativeDist/totalDist;
+		}
 		}
 //		System.out.println("intitial paramter T arr = " + Arrays.toString(parameterT));
 	}

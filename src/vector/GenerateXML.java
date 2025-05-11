@@ -34,7 +34,7 @@ public class GenerateXML {
 		System.out.println("e = " + e);
 		points = String.format(Locale.US,"M %.2f,%.2f C %.2f,%.2f %.2f,%.2f %.2f,%.2f",  functionArrX[start], functionArrY[start], cp.v1.x, cp.v1.y, cp.v2.x, cp.v2.y, functionArrX[end], functionArrY[end]);
 		System.out.println("RECURSIVE CALL!");
-		if(cp.maxError > 3 ) {
+		if(cp.maxError > 1 ) {
 			createXML(f, start, start + e);
 //			System.out.println("left size = " + e);
 			createXML(f, start + e, end);
