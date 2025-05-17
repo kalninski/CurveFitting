@@ -8,11 +8,11 @@ import statistics.*;
 public class GenerateXML {
 	
 	public Function f;
-	public double[] functionArrX;
-	public double[] functionArrY;
-	public double[] errorArr;
-	public int start;
-	public int end;
+	double[] functionArrX;
+	double[] functionArrY;
+	double[] errorArr;
+	int start;
+	int end;
 //	public StringBuilder svg = new StringBuilder("""
 //												<?xml version="1.0" encoding="UTF-8"?>
 //            									<svg width="1200" height="1000" xmlns="http://www.w3.org/2000/svg">
@@ -61,14 +61,14 @@ public class GenerateXML {
 
 		points = String.format(Locale.US,"M %.2f,%.2f C %.2f,%.2f %.2f,%.2f %.2f,%.2f",  functionArrX[start], functionArrY[start], cp.v1.xD, cp.v1.yD, cp.v2.xD, cp.v2.yD, functionArrX[end], functionArrY[end]);
 		System.out.println("RECURSIVE CALL!");
-		if(cp.maxError > 5 && (end - start - e) > 15 && e > 5) {
+		if(cp.maxError > 5 && (end - start - e) > 11 && e > 5) {
 			createXML1(f, start, start + e);
-			System.out.println("left size = " + e);
+//			System.out.println("left size = " + e);
 			createXML1(f, start + e, end);
-			System.out.println("right size = " + (end - (start + e)));
+			System.out.println("subarray start = " + start + " end  = " + end);
 		}else {
 			if(cp.v1.xD == Double.NaN || cp.v1.yD == Double.NaN || cp.v2.xD == Double.NaN || cp.v2.yD == Double.NaN){
-				System.out.println("one or more of the points was NaN");
+//				System.out.println("one or more of the points was NaN");
 				points = String.format(Locale.US,"M %.2f,%.2f L %.2f,%.2f",  functionArrX[start], functionArrY[start], functionArrX[end], functionArrY[end]);
 			}
 			svg.append(points);

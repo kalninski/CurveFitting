@@ -57,14 +57,12 @@ public class MatrixC {
 		double t = 0;
 		double newT = 0;
 		double sum = 0;
-		for(int i = 1; i < n; i++) {
+		for(int i = 0; i < n; i++) {
 			
-			if(v1 != null && v2 != null) {
-				t = ControlPoint.updateTParameter(t, i);
-			}
+
 
 			sum += Math.pow((1-t), 4) * t * t * 9;
-			t = (i) * incr;
+			t = (i + 1) * incr;
 
 
 		}
@@ -80,13 +78,11 @@ public class MatrixC {
 //		System.out.println("dotTan1Tan2 = " + dotTan1Tan2);
 		for(int i = 0; i < n; i++) {
 			
-			if(v1 != null && v2 != null) {
-				t = ControlPoint.updateTParameter(t, i);
-			}
+
 			
 			sum += Math.pow((1-t), 3) * t * t * t * 9 * dotTan1Tan2;
 			
-			t = (i) * incr;
+			t = (i + 1) * incr;
 		}
 		c12 = sum;
 		c21 = sum;
@@ -101,12 +97,10 @@ public class MatrixC {
 		double sum = 0;
 		for(int i = 0; i < n; i++) {
 			
-			if(v1 != null && v2 != null) {
-				t = ControlPoint.updateTParameter(t, i);
-			}
+
 
 			sum += Math.pow((1-t), 2) * t * t * t * t * 9;
-			t = (i) * incr;
+			t = (i + 1) * incr;
 		}
 		c22 = sum;
 	}
@@ -133,9 +127,7 @@ public class MatrixC {
 		double sum1 = 0;
 		double sum2 = 0;
 		for(int i = 0; i < n; i++) {
-			if(v1 != null && v2 != null) {
-				t = ControlPoint.updateTParameter(t, i);
-			}
+
 			
 			double coeff1 = Math.pow((1-t), 3);// Bernstein polynomial term
 			double coeff2 = Math.pow((1-t), 2) * t * 3;// Bernstein polynomial term
@@ -154,7 +146,7 @@ public class MatrixC {
 			Vector dIminusBernstein = Vector.subtract(dI, sumBernstein);
 			double oneTerm1 = dIminusBernstein.dot(outerTan1);
 			double oneTerm2 = dIminusBernstein.dot(outerTan2);
-			t = (i) * incr;
+			t = (i + 1) * incr;
 			sum1 += oneTerm1;
 			sum2 += oneTerm2;
 		}

@@ -41,8 +41,10 @@ public class ControlPoint {
 		this.getAlpha2();
 		this.curveX = new double[end - start];
 		this.curveY = new double[end - start];
-		this.getAlpha1();
-		this.getAlpha2();
+		//CREATE ARRAY OR IMPROVED PARAMETER !!! NEW METHOD
+		//CALL THE METHOD THEN, THE SECOND CALL TO METHODS BELOW
+//		this.getAlpha1();
+//		this.getAlpha2();
 	}
 
 	
@@ -60,7 +62,7 @@ public class ControlPoint {
 		double numerator = numeratorMatrix1.calculateDeterminant();
 		if(denominator < epsilon) {
 			alpha1 = 0;
-			v0Tan1 =v0Tan1 = Vector.multiplyByScaler(v0Tan1, 1);
+			v0Tan1 = Vector.multiplyByScaler(v0Tan1, 1);
 		}else {
 			alpha1 = numerator/denominator;
 			v0Tan1 = Vector.multiplyByScaler(v0Tan1, alpha1);
@@ -103,9 +105,7 @@ public class ControlPoint {
 		double incr = 1/n;
 		double t = 0;
 		for(int i = 0; i < n; i++ ) {
-			if(v1 != null && v2 != null) {
-				t = ControlPoint.updateTParameter(t, i);
-			}
+
 			double coeff0 = Math.pow((1-t), 3);
 			double coeff1 = Math.pow((1-t), 2) * t * 3;
 			double coeff2 = Math.pow(t, 2) * (1-t) * 3;
@@ -117,7 +117,7 @@ public class ControlPoint {
 			Vector lerpVec = Vector.add4Vectors(v0New, v1New, v2New, v3New);
 			curveX[i] = lerpVec.xD;
 			curveY[i] = lerpVec.yD;
-			t = (i) * incr;
+			t = (i + 1) * incr;
 		}
 //		System.out.println("curveX values = " + Arrays.toString(curveX) + "\n" + "curveY values =  " + Arrays.toString(curveY));
 	}
@@ -125,9 +125,15 @@ public class ControlPoint {
 	public int getErrorIndex(Function f) {
 		int errorIndex = 0;
 		maxError = 0;
+		double errorX = 0;
+		double errorY = 0;
 		error = new double[end - start];
 		for(int i = 0; i < error.length; i++) {
-			error[i] = Math.abs(f.yActualVal[start + i] - curveY[i]);
+			errorY = Math.abs(f.yActualVal[start + i] - curveY[i]);
+			errorX = Math.abs(f.xActualVal[start + i] - curveX[i]);
+			errorY = Math.pow(errorY, 2);
+			errorX = Math.pow(errorX, 2);
+			error[i] = Math.sqrt((errorX + errorY));
 			if(error[i] > error[errorIndex]) {
 				maxError = error[i];
 				errorIndex = i;
